@@ -29,8 +29,8 @@ A simple GUI application to create bootable USB drives for Windows, macOS (Hacki
 
 1. Clone this repository:
    ```
-   
-   cd ruuf-usb-flasher
+   git clone https://github.com/JJPEOPLES/Ruuf-.git
+   cd ruuf-
    ```
 
 2. Install the required dependencies:
