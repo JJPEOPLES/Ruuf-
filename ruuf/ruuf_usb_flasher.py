@@ -211,11 +211,11 @@ exit"""
             # Mount the ISO
             self.signals.status.emit("Mounting ISO image...")
             self.signals.progress.emit(20)
-            mount_cmd = f'powershell Mount-DiskImage -ImagePath "{self.iso_path}"'
+            mount_cmd = f'powershell Mount-DiskImage -ImagePath "{iso_path}"'
             subprocess.run(mount_cmd, shell=True, check=True)
 
             # Get the mounted drive letter
-            get_mount_cmd = f'powershell "(Get-DiskImage -ImagePath \'{self.iso_path}\' | Get-Volume).DriveLetter"'
+            get_mount_cmd = f'powershell "(Get-DiskImage -ImagePath \'{iso_path}\' | Get-Volume).DriveLetter"'
             iso_drive = subprocess.check_output(get_mount_cmd, shell=True).decode().strip()
 
             # Copy files from ISO to USB
@@ -237,7 +237,7 @@ exit"""
             # Unmount the ISO
             self.signals.status.emit("Finalizing...")
             self.signals.progress.emit(90)
-            unmount_cmd = f'powershell Dismount-DiskImage -ImagePath "{self.iso_path}"'
+            unmount_cmd = f'powershell Dismount-DiskImage -ImagePath "{iso_path}"'
             subprocess.run(unmount_cmd, shell=True, check=True)
 
             # Clean up
@@ -389,6 +389,7 @@ class LinuxWorker(threading.Thread):
 
     def _create_linux_windows(self):
         """Create Linux USB on Windows using direct write method"""
+        print(f"LinuxWorker._create_linux_windows - Starting with custom_iso_path: {self.custom_iso_path}")  # Debug output
         try:
             # Get drive letter from device path
             drive_letter = self.usb_device.split(':')[0]
@@ -557,6 +558,7 @@ class LinuxWorker(threading.Thread):
 
     def _create_linux_linux(self):
         """Create Linux USB on Linux using dd for direct writing"""
+        print(f"LinuxWorker._create_linux_linux - Starting with custom_iso_path: {self.custom_iso_path}")  # Debug output
         try:
             # Ensure device path is correct (should be like /dev/sdb, not a partition)
             device = self.usb_device
@@ -693,6 +695,7 @@ class LinuxWorker(threading.Thread):
 
     def _create_linux_macos(self):
         """Create Linux USB on macOS using dd for direct writing"""
+        print(f"LinuxWorker._create_linux_macos - Starting with custom_iso_path: {self.custom_iso_path}")  # Debug output
         try:
             # Get the base device (e.g., /dev/disk2)
             base_device = self.usb_device
